@@ -48,23 +48,40 @@ body {
   justify-content: flex-end;
   gap: 6px;
   box-shadow: 5px 4px 7px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+
   &.primary {
-    background-color: #f7c044;
-    width: 69px;
+    background-color: #5c94b7;
+    width: 60px;
     height: 67px;
     .text {
       margin-bottom: 2px;
-    }
-    .iconeajuda {
-      transform: scale(0.9);
+      font-family: FontBold;
+      color: white;
     }
     &:hover {
-      background-color: #fcecc6;
+      background-color: #80bbe7;
 
       .text,
       .icon {
-        opacity: 0.5;
+        opacity: 1;
       }
+    }
+  }
+
+  &.red-btn {
+    width: 140px;
+    height: 60px;
+    background: #ea5537;
+    border-radius: 10px;
+    justify-content: center;
+    .text {
+      color: #452d3f;
+      font-size: 22px;
+    }
+
+    &:hover {
+      background: #f4a595;
     }
   }
 }

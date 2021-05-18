@@ -14,8 +14,8 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #b1c0bf;
-  z-index: 100;
+  background-color: #f1e1da;
+  z-index: 1000;
   @include flex-center;
   .lds-ring {
     transform: scale(2);

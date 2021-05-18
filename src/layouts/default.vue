@@ -10,7 +10,7 @@
 export default {
   computed: {
     background() {
-      return this.$store.state.currentBackground || 'bg-menu'
+      return this.$store.state.currentBackground || 'bg-mesa'
     }
   }
 }

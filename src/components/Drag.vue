@@ -1,22 +1,21 @@
 <template>
   <div class="drag-wrap">
-    <div
-      ref="elDrag"
-      :class="classname"
-      :data-transfer="dataTransfer"
-      class="slot drag-el"
-      draggable="false"
-    ></div>
+    <div ref="elDrag" :class="classname" class="slot drag-el" draggable="false">
+      <div
+        ref="imageRotate"
+        class="regua"
+        :class="regua"
+        :style="{ transform: 'rotate(' + angulo + 'deg)' }"
+      >
+        <div class="button-rotate giraresq" @click.prevent="rotate"></div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import interact from 'interactjs'
 export default {
   props: {
-    dataTransfer: {
-      type: [Object, String],
-      required: true
-    },
     dropped: {
       type: Boolean,
       required: false,
@@ -26,6 +25,10 @@ export default {
       type: [String, Array],
       required: false,
       default: 'idle'
+    },
+    regua: {
+      type: String,
+      default: 'regua015'
     },
     onendEvent: {
       type: Function,
@@ -57,30 +60,47 @@ export default {
         endOnly: true,
         offset: 'self'
       },
-      sigmoidInterval: ''
+      sigmoidInterval: '',
+      rotation: 0,
+      translation: '',
+      angulo: 0
     }
   },
+  computed: {},
   mounted() {
     interact(this.$el.firstChild).draggable({
       inertia: true,
-      // snap: this.initialSnapTarget,
       restrict: {
-        restriction: '.stage-container'
+        restriction: '.restrition-place'
       },
       onmove: (event) => this.onMove(event),
       onstart: (event) => this.onStart(event),
       onend: (event) => this.onEnd(event)
     })
+    // console.log(
+    //   Number(this.$refs.imageRotate.style.transform.replace(/([^\d])+/gim, ""))
+    // );
+    // this.angulo = this.$refs.
   },
   methods: {
+    rotate() {
+      if (this.angulo === 0) {
+        this.angulo = -90
+      } else {
+        this.angulo = 0
+      }
+    },
     resetPosition() {
+      this.$emit('audioapagar')
       const target = this.$refs.elDrag
       target.style.transform = `translate(0px, 0px)`
       target.setAttribute('data-x', 0)
       target.setAttribute('data-y', 0)
       target.classList.remove('can-drop')
-      target.parentElement.parentElement.style.zIndex = '100'
+      this.angulo = 0
+      target.parentElement.parentElement.style.zIndex = '110'
     },
+
     onMove(event) {
       const target = event.target
       const dataX = target.getAttribute('data-x')
@@ -102,21 +122,10 @@ export default {
     onStart(event) {
       const target = event.target
       target.classList.add('start-drag')
-      event.target.style.transition = '0s'
     },
     onEnd(event) {
-      const target = event.target
-      target.classList.remove('start-drag')
-      if (target.classList.contains('can-drop')) {
-        target.classList.remove('start-drag')
-      } else {
-        setTimeout(() => {
-          target.setAttribute('data-x', 0)
-          target.setAttribute('data-y', 0)
-          target.style.transition = '0.5s'
-          target.style.transform = 'translate(0px, 0px)'
-        }, 10)
-      }
+      this.$emit('end')
+      event.target.classList.remove('start-drag')
     }
   }
 }
@@ -133,6 +142,22 @@ export default {
   pointer-events: visible;
 }
 
+.regua {
+  @include flex-center;
+}
+
+.button-rotate {
+  position: absolute;
+  bottom: -20px;
+  cursor: pointer;
+}
+
+.btn-apagar-forma {
+  display: none;
+  position: absolute;
+  cursor: pointer;
+  transform: scale(0.9);
+}
 .drag-wrap {
   display: flex;
   align-items: center;
@@ -150,11 +175,22 @@ export default {
         }
       }
     }
+    .button-rotate {
+      display: block;
+      opacity: 0.28;
+      transform: scale(0.8);
+      position: absolute;
+      top: -8px;
+      right: -32px;
+      cursor: pointer !important;
+    }
   }
   .dragging {
     &.can-drop {
-      filter: brightness(110%);
-      box-shadow: 0 0 10px 10px rgb(255, 255, 62);
+      filter: hue-rotate(74deg);
+    }
+    &.cannot-drop {
+      filter: saturate(0%);
     }
   }
 }
