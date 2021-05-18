@@ -32,7 +32,10 @@
         <div class="resposta-text">{{ respostaText }}</div>
         <input v-model="inputResposta" type="number" name="number" />
         <div class="text-cm">CM</div>
-        <button class="btn red-btn btn-confirmar">
+        <button
+          class="btn red-btn btn-confirmar"
+          @click.prevent="clickVerificarResposta"
+        >
           <div class="text">confirmar</div>
         </button>
       </div>
@@ -48,20 +51,31 @@
         <div class="image" :class="i.imageP"></div>
       </div>
     </div>
+    <PopUpFeedback
+      v-if="showFeedback"
+      :is-showed="showFeedback"
+      :objeto="actualObj"
+      :is-correct="isCorrect"
+      @voltar="clickCloseFeedback"
+      @continuar="clickContinuarFeedback"
+    ></PopUpFeedback>
   </section>
 </template>
 <script>
 import { listObj } from '../consts/home'
 import Backdrop from '../components/Backdrop'
 import Drag from '../components/Drag.vue'
+import PopUpFeedback from '../components/PopUpFeedback.vue'
 export default {
-  components: { Backdrop, Drag },
+  components: { Backdrop, Drag, PopUpFeedback },
   data() {
     return {
       listObj,
       index: 0,
       inputResposta: null,
-      showRegua: true
+      showRegua: true,
+      isCorrect: true,
+      showFeedback: false
     }
   },
   computed: {
@@ -69,16 +83,16 @@ export default {
       return this.listObj[this.index]
     },
     perguntaText() {
-      return `Qual é 
-       ${this.actualObj.medidaArtigo} 
-      <b>${this.actualObj.medida}</b> 
-      ${this.actualObj.artigo} 
+      return `Qual é
+       ${this.actualObj.medidaArtigo}
+      <b>${this.actualObj.medida}</b>
+      ${this.actualObj.artigo}
       ${this.actualObj.nomeEx}?`
     },
     respostaText() {
-      return `${this.actualObj.medidaArtigo} 
-      ${this.actualObj.medida} 
-      ${this.actualObj.artigo} 
+      return `${this.actualObj.medidaArtigo}
+      ${this.actualObj.medida}
+      ${this.actualObj.artigo}
       ${this.actualObj.nomeEx} é?`
     }
   },
@@ -86,6 +100,8 @@ export default {
     inputResposta(newValue, oldValue) {
       if (parseInt(newValue) === 0) {
         this.inputResposta = 0
+      } else if (newValue % 1 !== 0) {
+        this.inputResposta = parseInt(oldValue)
       } else if (parseInt(newValue) > 99) {
         this.inputResposta = oldValue
       }
@@ -99,17 +115,44 @@ export default {
       this.index = el.id
       el.isSelected = true
     },
-    deselectAll() {
-      this.listObj.map((i) => {
-        i.isSelected = false
-        return i
-      })
+    clickCloseFeedback() {
+      this.showFeedback = false
+    },
+    clickContinuarFeedback() {
+      // nao por som
+      this.showFeedback = false
+      this.getNextObjeto()
+    },
+    clickVerificarResposta() {
+      if (parseFloat(this.inputResposta) === this.actualObj.resposta) {
+        this.isCorrect = true
+        this.showFeedback = true
+        this.listObj[this.index].isCompleted = true
+      } else {
+        this.isCorrect = false
+        this.showFeedback = true
+      }
     },
     resetarRegua() {
       this.showRegua = false
       setTimeout(() => {
         this.showRegua = true
       }, 5)
+    },
+    deselectAll() {
+      this.listObj.map((i) => {
+        i.isSelected = false
+        return i
+      })
+    },
+    getNextObjeto() {
+      // nao colocar som aqui
+      const next = this.listObj.filter((el) => el.isCompleted === false)
+      if (next[0]) {
+        this.clickChangeObj(next[0])
+      } else {
+        console.log('terminou')
+      }
     }
   }
 }
