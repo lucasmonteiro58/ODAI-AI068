@@ -5,7 +5,11 @@
       <div class="text-popup">
         {{ objeto.textCorrect }}
       </div>
-      <button class="btn red-btn" @click.prevent="clickContinuar">
+      <button
+        class="btn red-btn"
+        @click.prevent="clickContinuar"
+        @mouseenter="hover"
+      >
         <div class="text">Continuar</div>
       </button>
     </div>
@@ -13,7 +17,11 @@
       <div class="text-popup">
         CALMA, NÃO ESTÁ CERTO AINDA! OBSERVE COM ATENÇÃO E TENTE NOVAMENTE !
       </div>
-      <button class="btn red-btn" @click.prevent="clickVoltar">
+      <button
+        class="btn red-btn"
+        @click.prevent="clickVoltar"
+        @mouseenter="hover"
+      >
         <div class="text">Voltar</div>
       </button>
     </div>
@@ -65,6 +73,9 @@ export default {
   methods: {
     showAnimation() {
       fromTop(this.$el.lastChild)
+    },
+    hover() {
+      this.$emit('hover')
     },
     clickContinuar() {
       this.$emit('continuar')

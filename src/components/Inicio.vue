@@ -1,7 +1,11 @@
 <template>
   <section class="container">
     <div class="image-inicio bg-inicio">
-      <button class="btn red-btn btn-inico" @click.prevent="clickIniciar">
+      <button
+        class="btn red-btn btn-inico"
+        @click.prevent="clickIniciar"
+        @mouseenter="hover"
+      >
         <div class="text">Iniciar</div>
       </button>
     </div>
@@ -13,6 +17,9 @@ export default {
   methods: {
     clickIniciar() {
       this.$emit('iniciar')
+    },
+    hover() {
+      this.$emit('hover')
     }
   }
 }

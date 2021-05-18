@@ -5,6 +5,7 @@
       <button
         class="btn primary btn-inicio z200"
         @click.prevent="clickOpenInicio"
+        @mouseenter="playAudioHover"
       >
         <div class="icon iconehome"></div>
         <div class="text">Início</div>
@@ -12,17 +13,23 @@
       <button
         class="btn primary btn-ajuda z200"
         @click.prevent="clickOpenAjuda"
+        @mouseenter="playAudioHover"
       >
         <div class="icon iconeajuda"></div>
         <div class="text">Ajuda</div>
       </button>
-      <button class="btn primary btn-som z501" @click.prevent="toogleSound">
+      <button
+        class="btn primary btn-som z501"
+        @click.prevent="toogleSound"
+        @mouseenter="playAudioHover"
+      >
         <div class="ico" :class="soundClass"></div>
         <div class="text">Som</div>
       </button>
       <button
         class="btn primary btn-creditos z501"
         @click.prevent="clickOpenCreditos"
+        @mouseenter="playAudioHover"
       >
         <div class="icon iconecredito"></div>
         <div class="text t11">Créditos</div>
@@ -33,6 +40,10 @@
         v-if="showRegua"
         class="drag-position"
         :regua="actualObj.regua"
+        @rotate="playAudioClick"
+        @startdrag="playAudioGrab"
+        @stopdrag="playAudioDrop"
+        @hover="playAudioHover"
       ></Drag>
       <div class="titulo"></div>
       <div class="pergunta" v-html="perguntaText"></div>
@@ -45,6 +56,7 @@
           class="btn red-btn btn-confirmar"
           :disabled="!inputResposta"
           @click.prevent="clickVerificarResposta"
+          @mouseenter="playAudioHover"
         >
           <div class="text">confirmar</div>
         </button>
@@ -57,6 +69,7 @@
         class="item-obj z200"
         :class="{ 'is-completed': i.isCompleted, 'is-selected': i.isSelected }"
         @click.prevent="clickChangeObj(i)"
+        @mouseenter="playAudioHover"
       >
         <div class="image" :class="i.imageP"></div>
       </div>
@@ -68,21 +81,34 @@
       :is-correct="isCorrect"
       @voltar="clickCloseFeedback"
       @continuar="clickContinuarFeedback"
+      @hover="playAudioHover"
     ></PopUpFeedback>
     <PopUpCongrats
       v-if="showCongrats"
       :is-showed="showCongrats"
       @inicio="clickInicioCongrats"
+      @hover="playAudioHover"
     ></PopUpCongrats>
-    <Inicio v-if="showIniciar" @iniciar="clickIniciar"></Inicio>
+    <Inicio
+      v-if="showIniciar"
+      @iniciar="clickIniciar"
+      @hover="playAudioHover"
+    ></Inicio>
     <Help
-      v-if="showHelp"
+      v-if="showHelp && !showIniciar"
       :index="indexHelp"
       :is-initial="isInitialHelp"
       @avancar="clickAvancarHelp"
       @voltar="clickVoltarHelp"
       @close="clickCloseHelp"
+      @hover="playAudioHover"
     ></Help>
+    <PopUpCreditos
+      v-if="showCreditos"
+      :is-showed="showCreditos"
+      @close="clickCloseCreditos"
+      @hover="playAudioHover"
+    ></PopUpCreditos>
   </section>
 </template>
 <script>
@@ -92,8 +118,19 @@ import Drag from '../components/Drag.vue'
 import PopUpFeedback from '../components/PopUpFeedback.vue'
 import PopUpCongrats from '../components/PopUpCongrats.vue'
 import Inicio from '../components/Inicio.vue'
+import audios from '../mixins/audios'
+import PopUpCreditos from '../components/PopUpCreditos.vue'
+
 export default {
-  components: { Backdrop, Drag, PopUpFeedback, PopUpCongrats, Inicio },
+  components: {
+    Backdrop,
+    Drag,
+    PopUpFeedback,
+    PopUpCongrats,
+    Inicio,
+    PopUpCreditos
+  },
+  mixins: [audios],
   data() {
     return {
       listObj,
@@ -103,7 +140,7 @@ export default {
       isCorrect: true,
       showFeedback: false,
       showCongrats: false,
-      showIniciar: false,
+      showIniciar: true,
       showHelp: true,
       showCreditos: false,
       indexHelp: 0,
@@ -149,6 +186,7 @@ export default {
   mounted() {},
   methods: {
     clickChangeObj(el) {
+      this.playAudioClick()
       this.deselectAll()
       this.inputResposta = null
       this.resetarRegua()
@@ -157,6 +195,7 @@ export default {
     },
     // ------ help
     clickAvancarHelp() {
+      this.playAudioClick()
       if (this.isInitialHelp) {
         if (this.indexHelp === 3) {
           this.showHelp = false
@@ -173,39 +212,51 @@ export default {
       }
     },
     clickCloseHelp() {
+      this.playAudioClick()
       this.indexHelp = 0
       this.showHelp = false
       this.isInitialHelp = false
     },
     clickVoltarHelp() {
+      this.playAudioClick()
       this.indexHelp--
     }, // -------------------
     clickOpenAjuda() {
+      this.playAudioClick()
       this.showHelp = true
     },
     clickCloseAjuda() {
+      this.playAudioClick()
       this.showHelp = false
     },
     clickOpenCreditos() {
+      this.playAudioClick()
       this.showCreditos = true
     },
     clickCloseCreditos() {
+      this.playAudioClick()
       this.showCreditos = false
     },
     clickIniciar() {
+      this.playAudioClick()
       this.showIniciar = false
       this.resetarAll()
     },
     clickOpenInicio() {
+      this.playAudioClick()
       this.showIniciar = true
     },
     clickCloseInicio() {
+      this.playAudioClick()
       this.showIniciar = false
     },
     toogleSound() {
       this.$store.commit('changeSoundState', !this.soundState)
+      this.playAudioClick()
     },
     clickInicioCongrats() {
+      this.stopAudioFinal()
+      this.playAudioClick()
       this.showCongrats = false
       this.resetarAll()
       this.showIniciar = true
@@ -216,30 +267,38 @@ export default {
         el.isCompleted = false
         return el
       })
+      this.resetarRegua()
       this.listObj[0].isSelected = true
       this.inputResposta = null
       this.indexHelp = 0
+      this.index = 0
       this.isInitialHelp = true
     },
     openCongrats() {
       this.showCongrats = true
+      this.playAudioFinal()
     },
     clickCloseFeedback() {
+      this.playAudioClick()
       this.showFeedback = false
     },
     clickContinuarFeedback() {
       // nao por som
       this.showFeedback = false
       this.getNextObjeto()
+      this.playAudioClick()
     },
     clickVerificarResposta() {
+      this.playAudioClick()
       if (parseFloat(this.inputResposta) === this.actualObj.resposta) {
         this.isCorrect = true
         this.showFeedback = true
         this.listObj[this.index].isCompleted = true
+        this.playAudioCorreto()
       } else {
         this.isCorrect = false
         this.showFeedback = true
+        this.playAudioErrado()
       }
     },
     resetarRegua() {

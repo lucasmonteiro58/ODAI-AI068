@@ -7,7 +7,11 @@
         :class="regua"
         :style="{ transform: 'rotate(' + angulo + 'deg)' }"
       >
-        <div class="button-rotate giraresq" @click.prevent="rotate"></div>
+        <div
+          class="button-rotate giraresq"
+          @click.prevent="rotate"
+          @mouseenter="hover"
+        ></div>
       </div>
     </div>
   </div>
@@ -84,11 +88,15 @@ export default {
   },
   methods: {
     rotate() {
+      this.$emit('rotate')
       if (this.angulo === 0) {
         this.angulo = -90
       } else {
         this.angulo = 0
       }
+    },
+    hover() {
+      this.$emit('hover')
     },
     resetPosition() {
       this.$emit('audioapagar')
@@ -120,11 +128,13 @@ export default {
       target.setAttribute('data-y', newY)
     },
     onStart(event) {
+      this.$emit('startdrag')
       const target = event.target
       target.parentElement.classList.add('parent-start-drag')
       target.classList.add('start-drag')
     },
     onEnd(event) {
+      this.$emit('stopdrag')
       this.$emit('end')
       event.target.classList.remove('start-drag')
       event.target.parentElement.classList.remove('parent-start-drag')

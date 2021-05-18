@@ -12,21 +12,21 @@
         <button
           v-if="index !== 0"
           class="btn blue-btn "
-          @mouseenter="mouseOverSong"
+          @mouseenter="hover"
           @click="voltarClick"
         >
           <div class="text">Voltar</div>
         </button>
-        <button
-          class="btn blue-btn "
-          @mouseenter="mouseOverSong"
-          @click="avancarClick"
-        >
+        <button class="btn blue-btn " @mouseenter="hover" @click="avancarClick">
           <div class="text">{{ nxtBtn }}</div>
         </button>
       </div>
     </div>
-    <button class="btn red-btn btn-fechar" @click.prevent="clickClose">
+    <button
+      class="btn red-btn btn-fechar"
+      @click.prevent="clickClose"
+      @mouseenter="hover"
+    >
       <div class="text">Sair da ajuda</div>
     </button>
     <div class="pergunta" :class="computedHelp[index].class">
@@ -80,14 +80,14 @@ export default {
     voltarClick() {
       this.$emit('voltar')
     },
-    mouseOverSong() {
-      this.$emit('hover')
-    },
     clickClose() {
       this.$emit('close')
     },
     avancarClick() {
       this.$emit('avancar')
+    },
+    hover() {
+      this.$emit('hover')
     }
   }
 }

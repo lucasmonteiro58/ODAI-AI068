@@ -10,7 +10,11 @@
           DE UM OBJETO! RECEBA ESTA MEDALHA!!!
         </div>
 
-        <button class="btn red-btn btn-inicio" @click.prevent="close">
+        <button
+          class="btn red-btn btn-inicio"
+          @click.prevent="close"
+          @mouseenter="hover"
+        >
           <div class="text">Início</div>
         </button>
       </div>
@@ -58,6 +62,9 @@ export default {
     },
     close() {
       this.$emit('inicio')
+    },
+    hover() {
+      this.$emit('hover')
     }
   }
 }
