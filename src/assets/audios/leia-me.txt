@@ -1,0 +1,16 @@
+Uso dos áudios:
+
+click -> ao clicar em um botão
+
+correto -> ao surgir o popup de resposta certa
+
+drop -> ao soltar o mouse enquanto segura a régua
+
+errado -> ao surgir o popup de resposta errada
+
+final -> ao surgir o popup final
+
+grab -> ao clicar na régua
+
+mouseenter -> ao passar o mouse por cima de um botão
+

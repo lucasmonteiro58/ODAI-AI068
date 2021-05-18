@@ -47,8 +47,12 @@ body {
   align-items: center;
   justify-content: flex-end;
   gap: 6px;
-  box-shadow: 5px 4px 7px rgba(0, 0, 0, 0.25);
+
   border-radius: 8px;
+
+  &:hover {
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+  }
 
   &.primary {
     background-color: #5c94b7;
@@ -59,13 +63,8 @@ body {
       font-family: FontBold;
       color: white;
     }
-    &:hover {
+    &:active {
       background-color: #80bbe7;
-
-      .text,
-      .icon {
-        opacity: 1;
-      }
     }
   }
 
@@ -80,8 +79,42 @@ body {
       font-size: 22px;
     }
 
-    &:hover {
+    &:active {
       background: #f4a595;
+    }
+
+    &:disabled {
+      background-color: #a7827a;
+      cursor: no-drop;
+
+      &:hover {
+        box-shadow: none;
+      }
+    }
+  }
+
+  &.blue-btn {
+    width: 140px;
+    height: 60px;
+    background: #5c94b7;
+    border-radius: 10px;
+    justify-content: center;
+    .text {
+      color: white;
+      font-size: 22px;
+    }
+
+    &:active {
+      background: #7a9fb6;
+    }
+
+    &:disabled {
+      background-color: #a7827a;
+      cursor: no-drop;
+
+      &:hover {
+        box-shadow: none;
+      }
     }
   }
 }

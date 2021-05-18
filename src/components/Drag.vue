@@ -121,11 +121,13 @@ export default {
     },
     onStart(event) {
       const target = event.target
+      target.parentElement.classList.add('parent-start-drag')
       target.classList.add('start-drag')
     },
     onEnd(event) {
       this.$emit('end')
       event.target.classList.remove('start-drag')
+      event.target.parentElement.classList.remove('parent-start-drag')
     }
   }
 }
@@ -200,5 +202,10 @@ export default {
 }
 .class-can-drop {
   filter: brightness(350%) drop-shadow(0px 0px 5px rgb(255, 255, 62));
+}
+
+.parent-start-drag {
+  transform: scale(1.02);
+  z-index: 502;
 }
 </style>

@@ -2,19 +2,28 @@
   <section class="container">
     <Backdrop :obj="actualObj.bg"></Backdrop>
     <div class="left-content">
-      <button class="btn primary btn-inicio">
+      <button
+        class="btn primary btn-inicio z200"
+        @click.prevent="clickOpenInicio"
+      >
         <div class="icon iconehome"></div>
         <div class="text">Início</div>
       </button>
-      <button class="btn primary btn-ajuda">
+      <button
+        class="btn primary btn-ajuda z200"
+        @click.prevent="clickOpenAjuda"
+      >
         <div class="icon iconeajuda"></div>
         <div class="text">Ajuda</div>
       </button>
-      <button class="btn primary btn-som">
-        <div class="icon iconesomon"></div>
+      <button class="btn primary btn-som z501" @click.prevent="toogleSound">
+        <div class="ico" :class="soundClass"></div>
         <div class="text">Som</div>
       </button>
-      <button class="btn primary btn-creditos">
+      <button
+        class="btn primary btn-creditos z501"
+        @click.prevent="clickOpenCreditos"
+      >
         <div class="icon iconecredito"></div>
         <div class="text t11">Créditos</div>
       </button>
@@ -28,12 +37,13 @@
       <div class="titulo"></div>
       <div class="pergunta" v-html="perguntaText"></div>
       <div class="objeto-medir" :class="actualObj.imageG"></div>
-      <div class="resposta">
+      <div class="resposta z200">
         <div class="resposta-text">{{ respostaText }}</div>
         <input v-model="inputResposta" type="number" name="number" />
         <div class="text-cm">CM</div>
         <button
           class="btn red-btn btn-confirmar"
+          :disabled="!inputResposta"
           @click.prevent="clickVerificarResposta"
         >
           <div class="text">confirmar</div>
@@ -44,7 +54,7 @@
       <div
         v-for="i in listObj"
         :key="i.id"
-        class="item-obj"
+        class="item-obj z200"
         :class="{ 'is-completed': i.isCompleted, 'is-selected': i.isSelected }"
         @click.prevent="clickChangeObj(i)"
       >
@@ -59,6 +69,20 @@
       @voltar="clickCloseFeedback"
       @continuar="clickContinuarFeedback"
     ></PopUpFeedback>
+    <PopUpCongrats
+      v-if="showCongrats"
+      :is-showed="showCongrats"
+      @inicio="clickInicioCongrats"
+    ></PopUpCongrats>
+    <Inicio v-if="showIniciar" @iniciar="clickIniciar"></Inicio>
+    <Help
+      v-if="showHelp"
+      :index="indexHelp"
+      :is-initial="isInitialHelp"
+      @avancar="clickAvancarHelp"
+      @voltar="clickVoltarHelp"
+      @close="clickCloseHelp"
+    ></Help>
   </section>
 </template>
 <script>
@@ -66,8 +90,10 @@ import { listObj } from '../consts/home'
 import Backdrop from '../components/Backdrop'
 import Drag from '../components/Drag.vue'
 import PopUpFeedback from '../components/PopUpFeedback.vue'
+import PopUpCongrats from '../components/PopUpCongrats.vue'
+import Inicio from '../components/Inicio.vue'
 export default {
-  components: { Backdrop, Drag, PopUpFeedback },
+  components: { Backdrop, Drag, PopUpFeedback, PopUpCongrats, Inicio },
   data() {
     return {
       listObj,
@@ -75,12 +101,25 @@ export default {
       inputResposta: null,
       showRegua: true,
       isCorrect: true,
-      showFeedback: false
+      showFeedback: false,
+      showCongrats: false,
+      showIniciar: false,
+      showHelp: true,
+      showCreditos: false,
+      indexHelp: 0,
+      isInitialHelp: true
     }
   },
   computed: {
     actualObj() {
       return this.listObj[this.index]
+    },
+    soundClass() {
+      if (this.soundState) return 'iconesomon'
+      else return 'iconesompff'
+    },
+    soundState() {
+      return this.$store.state.soundState
     },
     perguntaText() {
       return `Qual é
@@ -107,6 +146,7 @@ export default {
       }
     }
   },
+  mounted() {},
   methods: {
     clickChangeObj(el) {
       this.deselectAll()
@@ -114,6 +154,75 @@ export default {
       this.resetarRegua()
       this.index = el.id
       el.isSelected = true
+    },
+    // ------ help
+    clickAvancarHelp() {
+      if (this.isInitialHelp) {
+        if (this.indexHelp === 3) {
+          this.showHelp = false
+          this.isInitialHelp = false
+          this.indexHelp = 0
+        } else {
+          this.indexHelp++
+        }
+      } else if (this.indexHelp === 2) {
+        this.showHelp = false
+        this.indexHelp = 0
+      } else {
+        this.indexHelp++
+      }
+    },
+    clickCloseHelp() {
+      this.indexHelp = 0
+      this.showHelp = false
+      this.isInitialHelp = false
+    },
+    clickVoltarHelp() {
+      this.indexHelp--
+    }, // -------------------
+    clickOpenAjuda() {
+      this.showHelp = true
+    },
+    clickCloseAjuda() {
+      this.showHelp = false
+    },
+    clickOpenCreditos() {
+      this.showCreditos = true
+    },
+    clickCloseCreditos() {
+      this.showCreditos = false
+    },
+    clickIniciar() {
+      this.showIniciar = false
+      this.resetarAll()
+    },
+    clickOpenInicio() {
+      this.showIniciar = true
+    },
+    clickCloseInicio() {
+      this.showIniciar = false
+    },
+    toogleSound() {
+      this.$store.commit('changeSoundState', !this.soundState)
+    },
+    clickInicioCongrats() {
+      this.showCongrats = false
+      this.resetarAll()
+      this.showIniciar = true
+    },
+    resetarAll() {
+      this.listObj.map((el) => {
+        el.isSelected = false
+        el.isCompleted = false
+        return el
+      })
+      this.listObj[0].isSelected = true
+      this.inputResposta = null
+      this.indexHelp = 0
+      this.isInitialHelp = true
+    },
+    openCongrats() {
+      this.showCongrats = true
     },
     clickCloseFeedback() {
       this.showFeedback = false
@@ -151,7 +260,7 @@ export default {
       if (next[0]) {
         this.clickChangeObj(next[0])
       } else {
-        console.log('terminou')
+        this.openCongrats()
       }
     }
   }
@@ -304,7 +413,7 @@ export default {
       margin-bottom: 21px;
 
       &:hover {
-        background-color: #5c94b7;
+        background-color: #a3c3d7;
       }
 
       &.is-selected {

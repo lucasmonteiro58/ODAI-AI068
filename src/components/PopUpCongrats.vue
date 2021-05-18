@@ -1,21 +1,19 @@
 <template>
   <div v-show="showed" class="pop-up">
     <div class="backdrop"></div>
-    <div v-if="isCorrect" class="content" :class="objeto.popupCorrect">
-      <div class="text-popup">
-        {{ objeto.textCorrect }}
+    <div class="content popup-parabens">
+      <div class="content-popup">
+        <div class="text-popup">
+          VOCÊ MEDIU TODOS OS OBJETOS CORRETAMENTE E CONCLUIU A ATIVIDADE!!! BOM
+          TRABALHO!!!<br /><br />
+          AGORA VOCÊ JÁ SABE COMO UTILIZAR UMA RÉGUA PARA SABER A MEDIDA EXATA
+          DE UM OBJETO! RECEBA ESTA MEDALHA!!!
+        </div>
+
+        <button class="btn red-btn btn-inicio" @click.prevent="close">
+          <div class="text">Início</div>
+        </button>
       </div>
-      <button class="btn red-btn" @click.prevent="clickContinuar">
-        <div class="text">Continuar</div>
-      </button>
-    </div>
-    <div v-else class="content popup-quase">
-      <div class="text-popup">
-        CALMA, NÃO ESTÁ CERTO AINDA! OBSERVE COM ATENÇÃO E TENTE NOVAMENTE !
-      </div>
-      <button class="btn red-btn" @click.prevent="clickVoltar">
-        <div class="text">Voltar</div>
-      </button>
     </div>
   </div>
 </template>
@@ -23,21 +21,12 @@
 <script>
 import { fadeOut, fromTop } from '../assets/animate'
 export default {
-  name: 'PopUpFeedback',
+  name: 'PopUpCongrats',
   props: {
     isShowed: {
       type: Boolean,
       required: false,
       default: true
-    },
-    isCorrect: {
-      type: Boolean,
-      required: false,
-      default: true
-    },
-    objeto: {
-      type: Object,
-      required: true
     }
   },
   data() {
@@ -45,6 +34,7 @@ export default {
       showed: false
     }
   },
+  computed: {},
   watch: {
     isShowed(val, old) {
       if (!old && val) {
@@ -66,14 +56,8 @@ export default {
     showAnimation() {
       fromTop(this.$el.lastChild)
     },
-    clickContinuar() {
-      this.$emit('continuar')
-    },
-    clickVoltar() {
-      this.$emit('voltar')
-    },
-    clickClose() {
-      this.$emit('close')
+    close() {
+      this.$emit('inicio')
     }
   }
 }
@@ -85,41 +69,37 @@ export default {
 }
 .pop-up {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   z-index: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   .backdrop {
     position: absolute;
-    background-color: #00000090;
+    background-color: #ffffffbb;
     width: 100%;
     height: 100%;
   }
   .content {
     position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
     .text-popup {
+      position: absolute;
       width: 318px;
-      height: 83px;
+      top: 99px;
+      left: 244px;
       font-size: 22px;
-      font-family: FontRegular;
-      font-style: normal;
-      font-weight: normal;
       line-height: 26px;
       text-align: center;
       color: #452d3f;
-      margin-top: 82px;
+      font-family: FontRegular;
     }
-    .red-btn {
+    .btn-inicio {
       position: absolute;
-      bottom: -5px;
-      height: 46px;
+      bottom: -3px;
+      left: 320px;
     }
   }
 }
