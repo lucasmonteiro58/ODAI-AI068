@@ -77,7 +77,7 @@ export const listObj = [
     isSelected: false,
     isCompleted: false,
     regua: 'regua830livro',
-    resposta: 16,
+    resposta: 11,
     artigo: 'do',
     medida: 'largura',
     medidaArtigo: 'a',
