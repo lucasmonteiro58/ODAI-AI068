@@ -14,7 +14,8 @@ export const listObj = [
     medida: 'altura',
     medidaArtigo: 'a',
     textCorrect: 'VOCÊ MEDIU CORRETAMENTE A ALTURA DO TUBO DE COLA! PARABÉNS!',
-    popupCorrect: 'popup-isso'
+    popupCorrect: 'popup-isso',
+    indicativo: 'medidorcola'
   },
   {
     id: 1,
@@ -31,7 +32,8 @@ export const listObj = [
     medida: 'comprimento',
     medidaArtigo: 'o',
     textCorrect: 'VOCÊ MEDIU CORRETAMENTE O COMPRIMENTO DO ESTOJO! MUITO BEM!',
-    popupCorrect: 'popup-correto'
+    popupCorrect: 'popup-correto',
+    indicativo: 'medidorestojo'
   },
   {
     id: 2,
@@ -48,7 +50,8 @@ export const listObj = [
     medida: 'comprimento',
     medidaArtigo: 'o',
     textCorrect: 'VOCÊ MEDIU CORRETAMENTE O COMPRIMENTO DA CANETA! ARRASOU!',
-    popupCorrect: 'popup-boa'
+    popupCorrect: 'popup-boa',
+    indicativo: 'medidorcaneta'
   },
   {
     id: 3,
@@ -65,7 +68,8 @@ export const listObj = [
     medida: 'altura',
     medidaArtigo: 'a',
     textCorrect: 'VOCÊ MEDIU CORRETAMENTE A ALTURA DO BONECO! MUITO BOM!',
-    popupCorrect: 'popup-isso'
+    popupCorrect: 'popup-isso',
+    indicativo: 'medidorboneco'
   },
   {
     id: 4,
@@ -77,11 +81,12 @@ export const listObj = [
     isSelected: false,
     isCompleted: false,
     regua: 'regua830livro',
-    resposta: 11,
+    resposta: 16,
     artigo: 'do',
     medida: 'largura',
     medidaArtigo: 'a',
     textCorrect: 'VOCÊ MEDIU CORRETAMENTE A LARGURA DO LIVRO! PARABÉNS!',
-    popupCorrect: 'popup-isso'
+    popupCorrect: 'popup-isso',
+    indicativo: 'medidorlivro'
   }
 ]

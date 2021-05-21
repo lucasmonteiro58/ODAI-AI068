@@ -36,6 +36,11 @@
       </button>
     </div>
     <div class="center-content">
+      <div
+        v-if="indicativo"
+        class="medidor z200"
+        :class="actualObj.indicativo"
+      ></div>
       <Drag
         v-if="showRegua"
         class="drag-position"
@@ -46,7 +51,12 @@
         @hover="playAudioHover"
       ></Drag>
       <div class="titulo"></div>
-      <div class="pergunta" v-html="perguntaText"></div>
+      <div
+        class="pergunta z200"
+        @mouseenter="showIndicativo"
+        @mouseleave="hideIndicativo"
+        v-html="perguntaText"
+      ></div>
       <div class="objeto-medir" :class="actualObj.imageG"></div>
       <div class="resposta z200">
         <div class="resposta-text">{{ respostaText }}</div>
@@ -144,7 +154,8 @@ export default {
       showHelp: true,
       showCreditos: false,
       indexHelp: 0,
-      isInitialHelp: true
+      isInitialHelp: true,
+      indicativo: false
     }
   },
   computed: {
@@ -192,6 +203,13 @@ export default {
       this.resetarRegua()
       this.index = el.id
       el.isSelected = true
+    },
+    showIndicativo() {
+      this.indicativo = true
+      this.playAudioHover()
+    },
+    hideIndicativo() {
+      this.indicativo = false
     },
     // ------ help
     clickAvancarHelp() {
@@ -372,13 +390,14 @@ export default {
 
     .pergunta {
       position: absolute;
-      left: 204px;
+      left: 253px;
       top: 134px;
       font-size: 25px;
-      width: 552px;
-      height: 42px;
+      width: 437px;
+      height: 15px;
       text-align: center;
       color: #503849;
+      cursor: pointer;
     }
 
     .objeto-medir {
@@ -483,6 +502,35 @@ export default {
         border: 7px solid #60dc92;
       }
     }
+  }
+}
+
+.medidor {
+  position: absolute;
+
+  &.medidorcola {
+    top: 285px;
+    left: 187px;
+  }
+
+  &.medidorestojo {
+    top: 364px;
+    left: 315px;
+  }
+
+  &.medidorcaneta {
+    top: 263px;
+    left: 337px;
+  }
+
+  &.medidorboneco {
+    top: 302px;
+    left: 203px;
+  }
+
+  &.medidorlivro {
+    top: 208px;
+    left: 399px;
   }
 }
 </style>
