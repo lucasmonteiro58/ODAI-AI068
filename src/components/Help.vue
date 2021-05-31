@@ -30,7 +30,7 @@
       <div class="text">Sair da ajuda</div>
     </button>
     <div class="pergunta" :class="computedHelp[index].class">
-      Qual a <b>altura</b> do tubo de cola?
+      Qual é a <b>altura</b> do tubo de cola?
     </div>
     <div class="gcola" :class="computedHelp[index].class"></div>
     <div class="btn-ajuda-animation" :class="computedHelp[index].class"></div>

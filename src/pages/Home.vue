@@ -180,7 +180,7 @@ export default {
       return `${this.actualObj.medidaArtigo}
       ${this.actualObj.medida}
       ${this.actualObj.artigo}
-      ${this.actualObj.nomeEx} é?`
+      ${this.actualObj.nomeEx} é`
     }
   },
   watch: {
